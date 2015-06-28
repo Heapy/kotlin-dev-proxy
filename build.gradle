@@ -1,0 +1,32 @@
+apply plugin: "kotlin"
+apply plugin: "application"
+
+buildscript {
+    ext {
+        kotlin = '0.12.613'
+    }
+
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin"
+    }
+}
+
+mainClassName = "server.ServerPackage"
+
+task wrapper(type: Wrapper) {
+   gradleVersion = '2.4'
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin"
+    compile "com.sparkjava:spark-core:2.2"
+    compile "com.github.kevinsawicki:http-request:6.0"
+}
+
