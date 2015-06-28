@@ -56,10 +56,6 @@ fun main(args: Array<String>) {
     delete(proxyPrefix, { req, res ->
         mapResponse(res, HttpRequest.delete(getProxyUrl(req)).headers(mapReqHeaders(req)).send(req.body()))
     })
-
-    post("/", { req, res ->
-        req.body()
-    })
 }
 
 val resources = Properties()
