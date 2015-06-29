@@ -27,6 +27,6 @@ repositories {
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin"
     compile "com.sparkjava:spark-core:2.2"
-    compile "com.github.kevinsawicki:http-request:6.0"
+    compile "org.apache.httpcomponents:fluent-hc:4.5"
 }
 

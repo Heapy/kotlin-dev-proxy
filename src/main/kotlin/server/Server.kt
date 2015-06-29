@@ -1,92 +1,99 @@
 package server
 
 import com.github.kevinsawicki.http.HttpRequest
-import spark.Request
-import spark.Response
+import org.apache.http.HttpResponse
+import org.apache.http.client.fluent.Content
+import org.apache.http.client.fluent.Request
+import org.apache.http.client.fluent.Response
+import org.apache.http.entity.ContentType
+import org.apache.http.util.EntityUtils
 import spark.Spark.delete
 import spark.Spark.get
 import spark.Spark.post
 import spark.Spark.put
 import spark.SparkBase.externalStaticFileLocation
 import spark.SparkBase.port
+import java.nio.file.Files
 import java.util.HashMap
 import java.util.Properties
 
 fun main(args: Array<String>) {
     init()
 
+    // Server setup
+
     externalStaticFileLocation(getString("static.files.location"))
     port(getInt("server.port"))
 
     val proxyPrefix = getString("server.proxy") + "*"
 
-    fun getProxyUrl(req: spark.Request): String {
-        return req.pathInfo().replace(getString("server.proxy"), "")
+    fun url(req: spark.Request): String {
+        val proxyUrl = req.pathInfo().replace(getString("server.proxy"), "")
+        return if (req.queryString() === null) proxyUrl else proxyUrl + "?" + req.queryString()
     }
 
-    fun HttpRequest.addHeaders(req: Request): HttpRequest {
-        val headers = HashMap<String, String>()
-        for (header in req.headers()) {
-            headers.put(header, req.headers(header))
-        }
-        return this.headers(headers)
-    }
+    // Extensions for library
 
-    fun HttpRequest.addParameters(req: Request): HttpRequest {
-        for ((param, value) in req.params()) {
-            this.parameter(param, value)
+    fun Request.addHeaders(req: spark.Request): Request {
+        req.headers().filter { it -> it !== "Content-Length" } forEach {
+            this.setHeader(it, req.headers(it))
         }
         return this
     }
 
-    fun HttpRequest.mapHeaders(res: Response): HttpRequest {
-        for ((header, value) in this.headers()) {
-            if (header != null) {
-                res.header(header, value.get(0))
-            }
+    fun Request.addBody(req: spark.Request): Request {
+        return this.bodyByteArray(req.bodyAsBytes())
+    }
+
+    fun Request.go(): HttpResponse {
+        return this.execute().returnResponse()
+    }
+
+    fun HttpResponse.mapHeaders(res: spark.Response): HttpResponse {
+        this.getAllHeaders().forEach {
+            res.header(it.getName(), it.getValue())
         }
         return this
     }
 
-    fun HttpRequest.mapStatus(res: Response): HttpRequest {
-        res.status(this.code())
+    fun HttpResponse.mapStatus(res: spark.Response): HttpResponse {
+        res.status(this.getStatusLine().getStatusCode())
         return this
     }
 
-    fun HttpRequest.result(): String {
-        return this.body()
+    fun HttpResponse.result(): String {
+        val entity = this.getEntity()
+        return if (entity === null) "" else String(EntityUtils.toByteArray(entity))
     }
 
-    fun Go(method: String, url: String?): HttpRequest {
-        when (method) {
-            "GET" -> return HttpRequest.get(url)
-            "POST" -> return HttpRequest.post(url)
-            "PUT" -> return HttpRequest.put(url)
-            "DELETE" -> return HttpRequest.delete(url)
-            else -> {
-                throw RuntimeException("Unexpected request method $method");
-            }
-        }
-    }
+    // Actually proxy
 
     get(proxyPrefix, { req, res ->
-        Go("GET", getProxyUrl(req)).addParameters(req).addHeaders(req).send(req.body())
-                .mapHeaders(res).mapStatus(res).result()
+        Request.Get(url(req)).addHeaders(req)
+                .go()
+                .mapHeaders(res).mapStatus(res)
+                .result()
     })
 
     post(proxyPrefix, { req, res ->
-        Go("POST", getProxyUrl(req)).addParameters(req).addHeaders(req).send(req.body())
-                .mapHeaders(res).mapStatus(res).result()
+        Request.Post(url(req)).addHeaders(req).addBody(req)
+                .go()
+                .mapHeaders(res).mapStatus(res)
+                .result()
     })
 
     put(proxyPrefix, { req, res ->
-        Go("PUT", getProxyUrl(req)).addParameters(req).addHeaders(req).send(req.body())
-                .mapHeaders(res).mapStatus(res).result()
+        Request.Put(url(req)).addHeaders(req).addBody(req)
+                .go()
+                .mapHeaders(res).mapStatus(res)
+                .result()
     })
 
     delete(proxyPrefix, { req, res ->
-        Go("DELETE", getProxyUrl(req)).addParameters(req).addHeaders(req).send(req.body())
-                .mapHeaders(res).mapStatus(res).result()
+        Request.Delete(url(req)).addHeaders(req)
+                .go()
+                .mapHeaders(res).mapStatus(res)
+                .result()
     })
 }
 
