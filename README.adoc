@@ -1,0 +1,29 @@
+= Simple HTTP Proxy for local development
+
+Proxying static files and request: all what you need in moder SPA development.
+
+Simple install:
+
+[source,bash]
+git clone https://github.com/IRus/kotlin-dev-proxy.git
+
+And use:
+
+[source,bash]
+cd kotlin-dev-proxy
+./gradlew run
+
+= Setup
+
+Default settings defined in *default.properties*.
+Best way to change default setting - add your *custom.properties* properties and overwrite default properties.
+
+== Available properties
+
+* server.port - port on with proxy will be started (default: 8808)
+* server.proxy - prefix for API requests, for example: http://localhost:8808/proxy/http://my-backend-server.com/resource (default: /proxy/)
+* static.files.location - location of static files on disk, for example: *C:\\dev\\projects\\frontend* (default: /home/user/dev/frontend)
+
+= Contribution
+
+Please leave feedback, create issues and make pull request!

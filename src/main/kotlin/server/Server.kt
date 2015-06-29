@@ -14,21 +14,22 @@ import spark.Spark.put
 import spark.SparkBase.externalStaticFileLocation
 import spark.SparkBase.port
 import java.nio.file.Files
-import java.util.HashMap
-import java.util.Properties
+import java.nio.file.Paths
+import java.util.*
 
 fun main(args: Array<String>) {
-    init()
+
+    val settings = ServerSettings();
 
     // Server setup
 
-    externalStaticFileLocation(getString("static.files.location"))
-    port(getInt("server.port"))
+    externalStaticFileLocation(settings.getString("static.files.location"))
+    port(settings.getInt("server.port"))
 
-    val proxyPrefix = getString("server.proxy") + "*"
+    val proxyPrefix = settings.getString("server.proxy") + "*"
 
     fun url(req: spark.Request): String {
-        val proxyUrl = req.pathInfo().replace(getString("server.proxy"), "")
+        val proxyUrl = req.pathInfo().replace(settings.getString("server.proxy"), "")
         return if (req.queryString() === null) proxyUrl else proxyUrl + "?" + req.queryString()
     }
 
@@ -97,17 +98,25 @@ fun main(args: Array<String>) {
     })
 }
 
-val resources = Properties()
-fun init() {
-    resources.javaClass.getResourceAsStream("/default.properties").use {
-        resources.load(it);
+class ServerSettings {
+
+    val resources = Properties()
+
+    init {
+        Arrays.asList("/default.properties", "/custom.properties").forEach {
+            val url = resources.javaClass.getResource(it);
+            if (url === null) return@forEach
+            resources.javaClass.getResourceAsStream(it).use {
+                resources.load(it)
+            }
+        }
     }
-}
 
-fun getString(key: String): String {
-    return resources.get(key)!! as String;
-}
+    fun getString(key: String): String {
+        return resources.get(key)!! as String;
+    }
 
-fun getInt(key: String): Int {
-    return (resources.get(key)!! as String).toInt()
+    fun getInt(key: String): Int {
+        return (resources.get(key)!! as String).toInt()
+    }
 }
