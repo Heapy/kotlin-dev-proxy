@@ -1,11 +1,7 @@
 package server
 
-import com.github.kevinsawicki.http.HttpRequest
 import org.apache.http.HttpResponse
-import org.apache.http.client.fluent.Content
 import org.apache.http.client.fluent.Request
-import org.apache.http.client.fluent.Response
-import org.apache.http.entity.ContentType
 import org.apache.http.util.EntityUtils
 import spark.Spark.delete
 import spark.Spark.get
@@ -13,9 +9,8 @@ import spark.Spark.post
 import spark.Spark.put
 import spark.SparkBase.externalStaticFileLocation
 import spark.SparkBase.port
-import java.nio.file.Files
-import java.nio.file.Paths
-import java.util.*
+import java.util.Arrays
+import java.util.Properties
 
 fun main(args: Array<String>) {
 
