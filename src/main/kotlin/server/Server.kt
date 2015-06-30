@@ -14,7 +14,7 @@ import java.util.Properties
 
 fun main(args: Array<String>) {
 
-    val settings = ServerSettings();
+    val settings = ServerSettings()
 
     // Server setup
 
@@ -31,7 +31,7 @@ fun main(args: Array<String>) {
     // Extensions for library
 
     fun Request.addHeaders(req: spark.Request): Request {
-        req.headers().filter { it -> it !== "Content-Length" } forEach {
+        req.headers().filter { it !== "Content-Length" } forEach {
             this.setHeader(it, req.headers(it))
         }
         return this
