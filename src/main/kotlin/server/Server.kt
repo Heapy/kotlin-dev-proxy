@@ -15,6 +15,7 @@ import java.util.Properties
 fun main(args: Array<String>) {
 
     val settings = ServerSettings()
+    settings.printSettings()
 
     // Server setup
 
@@ -31,7 +32,7 @@ fun main(args: Array<String>) {
     // Extensions for library
 
     fun Request.addHeaders(req: spark.Request): Request {
-        req.headers().filter { it !== "Content-Length" } forEach {
+        req.headers().filter { it !== "Content-Length" }.forEach {
             this.setHeader(it, req.headers(it))
         }
         return this
@@ -99,7 +100,7 @@ class ServerSettings {
 
     init {
         Arrays.asList("/default.properties", "/custom.properties").forEach {
-            val url = resources.javaClass.getResource(it);
+            val url = resources.javaClass.getResource(it)
             if (url === null) return@forEach
             resources.javaClass.getResourceAsStream(it).use {
                 resources.load(it)
@@ -107,8 +108,14 @@ class ServerSettings {
         }
     }
 
+    fun printSettings() {
+        resources.stringPropertyNames().forEach {
+            println("Property: '${it}' has value: '${resources.get(it)}'")
+        }
+    }
+
     fun getString(key: String): String {
-        return resources.get(key)!! as String;
+        return resources.get(key)!! as String
     }
 
     fun getInt(key: String): Int {
