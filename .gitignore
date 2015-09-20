@@ -6,4 +6,4 @@
 build
 .gradle
 
-custom.properties
+*-custom.properties

@@ -15,8 +15,8 @@ cd kotlin-dev-proxy
 
 = Setup
 
-Default settings defined in *default.properties*.
-Best way to change default setting - add your *custom.properties* properties and overwrite default properties.
+Default settings defined in *application.properties*.
+Best way to change default setting - add your *application-custom.properties* properties and overwrite default properties.
 
 == Available properties
 

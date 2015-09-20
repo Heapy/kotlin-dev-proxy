@@ -7,14 +7,14 @@ import spark.Spark.delete
 import spark.Spark.get
 import spark.Spark.post
 import spark.Spark.put
+import spark.Spark.head
+import spark.Spark.options
 import spark.SparkBase.externalStaticFileLocation
 import spark.SparkBase.port
-import java.util.Arrays
-import java.util.Properties
 
 fun main(args: Array<String>) {
 
-    val settings = ServerSettings()
+    val settings = ServerSettings("application")
     settings.printSettings()
 
     // Server setup
@@ -47,19 +47,19 @@ fun main(args: Array<String>) {
     }
 
     fun HttpResponse.mapHeaders(res: spark.Response): HttpResponse {
-        this.getAllHeaders().forEach {
-            res.header(it.getName(), it.getValue())
+        this.allHeaders.forEach {
+            res.header(it.name, it.value)
         }
         return this
     }
 
     fun HttpResponse.mapStatus(res: spark.Response): HttpResponse {
-        res.status(this.getStatusLine().getStatusCode())
+        res.status(this.statusLine.statusCode)
         return this
     }
 
     fun HttpResponse.result(): String {
-        val entity = this.getEntity()
+        val entity = this.entity
         return if (entity === null) "" else String(EntityUtils.toByteArray(entity))
     }
 
@@ -92,33 +92,20 @@ fun main(args: Array<String>) {
                 .mapHeaders(res).mapStatus(res)
                 .result()
     })
+
+    options(proxyPrefix, { req, res ->
+        Request.Options(url(req)).addHeaders(req).addBody(req)
+                .go()
+                .mapHeaders(res).mapStatus(res)
+                .result()
+    })
+
+    // TODO: Not sure is this works correctly.
+    // TODO: Add tests for all methods if possible
+    head(proxyPrefix, { req, res ->
+        Request.Head(url(req)).addHeaders(req).addBody(req)
+                .go()
+                .mapHeaders(res).mapStatus(res)
+    })
 }
 
-class ServerSettings {
-
-    val resources = Properties()
-
-    init {
-        Arrays.asList("/default.properties", "/custom.properties").forEach {
-            val url = resources.javaClass.getResource(it)
-            if (url === null) return@forEach
-            resources.javaClass.getResourceAsStream(it).use {
-                resources.load(it)
-            }
-        }
-    }
-
-    fun printSettings() {
-        resources.stringPropertyNames().forEach {
-            println("Property: '${it}' has value: '${resources.get(it)}'")
-        }
-    }
-
-    fun getString(key: String): String {
-        return resources.get(key)!! as String
-    }
-
-    fun getInt(key: String): Int {
-        return (resources.get(key)!! as String).toInt()
-    }
-}

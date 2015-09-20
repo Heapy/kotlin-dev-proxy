@@ -3,7 +3,7 @@ apply plugin: "application"
 
 buildscript {
     ext {
-        kotlin = '0.12.1230'
+        kotlin = '0.13.1513'
     }
 
     repositories {
