@@ -94,16 +94,13 @@ fun main(args: Array<String>) {
     })
 
     options(proxyPrefix, { req, res ->
-        Request.Options(url(req)).addHeaders(req).addBody(req)
+        Request.Options(url(req)).addHeaders(req)
                 .go()
                 .mapHeaders(res).mapStatus(res)
-                .result()
     })
 
-    // TODO: Not sure is this works correctly.
-    // TODO: Add tests for all methods if possible
     head(proxyPrefix, { req, res ->
-        Request.Head(url(req)).addHeaders(req).addBody(req)
+        Request.Head(url(req)).addHeaders(req)
                 .go()
                 .mapHeaders(res).mapStatus(res)
     })
