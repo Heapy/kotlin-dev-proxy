@@ -3,14 +3,7 @@ package server
 import org.apache.http.HttpResponse
 import org.apache.http.client.fluent.Request
 import org.apache.http.util.EntityUtils
-import spark.Spark.delete
-import spark.Spark.get
-import spark.Spark.post
-import spark.Spark.put
-import spark.Spark.head
-import spark.Spark.options
-import spark.SparkBase.externalStaticFileLocation
-import spark.SparkBase.port
+import spark.Spark.*
 
 fun main(args: Array<String>) {
 

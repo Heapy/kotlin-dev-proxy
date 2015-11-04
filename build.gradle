@@ -3,12 +3,13 @@ apply plugin: "application"
 
 buildscript {
     ext {
-        kotlin = '0.13.1513'
+        kotlin = '1.0.0-beta-1103'
     }
 
     repositories {
         jcenter()
     }
+
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin"
     }
@@ -17,7 +18,8 @@ buildscript {
 mainClassName = "server.ServerPackage"
 
 task wrapper(type: Wrapper) {
-   gradleVersion = '2.7'
+    gradleVersion = '2.8'
+    distributionUrl = "http://services.gradle.org/distributions/gradle-2.8-bin.zip"
 }
 
 repositories {
@@ -26,7 +28,7 @@ repositories {
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin"
-    compile "com.sparkjava:spark-core:2.2"
-    compile "org.apache.httpcomponents:fluent-hc:4.5"
+    compile "com.sparkjava:spark-core:2.3"
+    compile "org.apache.httpcomponents:fluent-hc:4.5.1"
 }
 
