@@ -3,7 +3,7 @@ apply plugin: "application"
 
 buildscript {
     ext {
-        kotlin = '1.0.0-beta-1103'
+        kotlin = '1.0.0-beta-3595'
     }
 
     repositories {
@@ -15,11 +15,11 @@ buildscript {
     }
 }
 
-mainClassName = "server.ServerPackage"
+mainClassName = "server.ServerKt"
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.8'
-    distributionUrl = "http://services.gradle.org/distributions/gradle-2.8-bin.zip"
+    gradleVersion = '2.9'
+    distributionUrl = "http://services.gradle.org/distributions/gradle-2.9-bin.zip"
 }
 
 repositories {
