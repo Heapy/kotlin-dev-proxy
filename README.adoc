@@ -1,6 +1,6 @@
 = Simple HTTP Proxy for local development
 
-Proxying static files and request: all what you need in moder SPA development.
+Proxying static files and request: all what you need in modern SPA development.
 
 Simple install:
 
