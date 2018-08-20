@@ -11,6 +11,9 @@ import org.yaml.snakeyaml.Yaml
 import java.net.URI
 import java.nio.file.Paths
 
+/**
+ * Reverse proxy sample: https://github.com/undertow-io/undertow/blob/master/examples/src/main/java/io/undertow/examples/reverseproxy/ReverseProxyServer.java
+ */
 object Server {
     @JvmStatic
     fun main(args: Array<String>) {
