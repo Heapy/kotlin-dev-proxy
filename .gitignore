@@ -1,9 +1,11 @@
+# Intellij Idea
 .idea/
 *.iml
 *.iws
 *.ipr
 
+# Gradle
 build
 .gradle
 
-*-custom.properties
+application.yml

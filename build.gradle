@@ -18,7 +18,7 @@ repositories {
 }
 
 dependencies {
-    compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
+    compile("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
     compile("io.undertow:undertow-core:$undertowVersion")
     compile("org.yaml:snakeyaml:$snakeYmlVersion")
     compile("org.slf4j:slf4j-simple:$slf4jVersion")

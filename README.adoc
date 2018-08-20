@@ -15,14 +15,14 @@ cd kotlin-dev-proxy
 
 = Setup
 
-Default settings defined in *application.properties*.
-Best way to change default setting - add your *application-custom.properties* properties and overwrite default properties.
+Make copy of `application.yml.sample` in same directory and name it `application.yml`. Change `application.yml` to meet your need.
 
-== Available properties
+== Available configuration
 
-* server.port - port on with proxy will be started (default: 8808)
-* server.proxy - prefix for API requests, for example: http://localhost:8808/proxy/http://my-backend-server.com/resource (default: /proxy/)
-* static.files.location - location of static files on disk, for example: *C:\\dev\\projects\\frontend* (default: /home/user/dev/frontend)
+* port - port on with proxy will be started
+* host - host to run application
+* mappings - prefix for API requests and target host
+* files - location of static files on disk, for example: `C:\\dev\\projects\\frontend` or `/home/user/dev/frontend`
 
 = Contribution
 

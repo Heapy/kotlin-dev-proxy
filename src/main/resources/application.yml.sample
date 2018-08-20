@@ -1,0 +1,8 @@
+files: "./"
+port: 8080
+host: "0.0.0.0"
+mappings:
+- prefix: "/api1/"
+  host: "http://localhost:8081/"
+- prefix: "/api2/"
+  host: "http://localhost:8082/"
