@@ -13,17 +13,17 @@ And use:
 cd kotlin-dev-proxy
 ./gradlew run
 
-= Setup
+== Setup
 
 Make copy of `application.yml.sample` in same directory and name it `application.yml`. Change `application.yml` to meet your need.
 
-== Available configuration
+=== Available configuration
 
 * port - port on with proxy will be started
 * host - host to run application
 * mappings - prefix for API requests and target host
 * files - location of static files on disk, for example: `C:\\dev\\projects\\frontend` or `/home/user/dev/frontend`
 
-= Contribution
+== Contribution
 
 Please leave feedback, create issues and make pull request!

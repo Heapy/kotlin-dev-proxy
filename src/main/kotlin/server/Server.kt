@@ -3,6 +3,7 @@ package server
 import io.undertow.Undertow
 import io.undertow.client.UndertowClient
 import io.undertow.server.handlers.PathHandler
+import io.undertow.server.handlers.accesslog.AccessLogHandler
 import io.undertow.server.handlers.proxy.LoadBalancingProxyClient
 import io.undertow.server.handlers.proxy.ProxyHandler
 import io.undertow.server.handlers.resource.PathResourceManager
@@ -28,7 +29,10 @@ object Server {
         config.mappings.forEach {
             val clientProxy = LoadBalancingProxyClient(UndertowClient.getInstance())
                 .addHost(URI(it.host))
-            val proxyHandler = ProxyHandler.builder().setProxyClient(clientProxy).setRewriteHostHeader(true).build()
+            val proxyHandler = ProxyHandler.builder()
+                .setProxyClient(clientProxy)
+                .setRewriteHostHeader(true)
+                .build()
 
             rootHandler.addPrefixPath(it.prefix) { exchange ->
                 proxyHandler.handleRequest(exchange)
