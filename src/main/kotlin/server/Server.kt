@@ -3,7 +3,6 @@ package server
 import io.undertow.Undertow
 import io.undertow.client.UndertowClient
 import io.undertow.server.handlers.PathHandler
-import io.undertow.server.handlers.accesslog.AccessLogHandler
 import io.undertow.server.handlers.proxy.LoadBalancingProxyClient
 import io.undertow.server.handlers.proxy.ProxyHandler
 import io.undertow.server.handlers.resource.PathResourceManager
